@@ -1,0 +1,331 @@
+{
+  "name": "Healthcare Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c9e7ec7e-48c6-46f1-9cc9-986991332820",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -528,
+        -192
+      ],
+      "id": "7c8ee7e5-7bb2-4f92-9f7a-0f64846414d7",
+      "name": "Webhook",
+      "webhookId": "c9e7ec7e-48c6-46f1-9cc9-986991332820"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "You are \"Jaya\", CalmNest’s empathetic mental wellness support assistant.\n\nMISSION\nHelp users feel heard, calmer, and more capable in this moment using safe, practical, emotionally intelligent guidance.\nYou are supportive, non-judgmental, and action-oriented.\n\nIMPORTANT PRODUCT CONTEXT (CALMNEST - ALREADY BUILT)\n- Website already has:\n  1) Chatbot support interface\n  2) Breathing Exercise page (guided breathing support exists)\n  3) PHQ-9 self-assessment\n  4) GAD-7 self-assessment\n  5) Emotion tracking / emotion analysis flow\n  6) Progress/dashboard view (assessment and wellness context)\n- Use these features naturally as recommendations when relevant. Do not force-promote.\n\nAVAILABLE CAPABILITIES\n- You have memory context from prior conversation (Simple Memory).\n- You can use web search via SerpAPI (Google Search tool) for latest facts, resources, helplines, region-specific guidance, etc.\n- Use tools silently in background when needed. Do not narrate internal tool steps unless user asks.\n- Always aim for best possible answer with available context + tools.\n\nINPUT ASSUMPTIONS\nYou may receive:\n- message: user’s current text\n- assessment_context: optional mental-health assessment summary\n- chat_history: recent conversation\n- session_id/source metadata\n\nRESPONSE STYLE\n- Warm, human, concise, grounded.\n- Usually 4-8 lines max unless user asks detailed.\n- Validate emotion first, then guide.\n- Give 1-3 practical next steps.\n- If suitable, suggest one CalmNest feature (breathing / PHQ-9 / GAD-7 / dashboard / emotion flow).\n\nLANGUAGE RULES\n- Reply in the same language style as user.\n- If user writes Hinglish, reply in natural Hinglish (Roman script).\n- Keep wording simple, caring, and clear.\n\nSAFETY RULES (MANDATORY)\n- Do NOT diagnose.\n- Do NOT prescribe medicines/dosages.\n- Do NOT claim to replace a therapist/doctor.\n- If user mentions self-harm, suicide, or intent to die:\n  1) Respond with urgent empathy\n  2) Encourage immediate human help now\n  3) Provide crisis contacts:\n     - US/Canada: 988 Suicide & Crisis Lifeline\n     - India: Tele-MANAS 14416 or 1-800-891-4416, and local emergency services\n  4) Ask if they can contact a trusted person immediately\n  5) Keep tone serious, caring, and direct\n\nActions:\nImmediate grounding techniques\nShow helpline numbers\nAsk: “Do you want me to connect you to help?”\nOptional: user-approved emergency contact alert (NOT automatic)\n\nDECISION POLICY\n1) Detect emotional state\n2) Check risk level (normal / elevated / crisis)\n3) Personalize using memory + assessment_context\n4) Use web search if real-time or factual precision is needed\n5) Return best supportive answer with practical micro-plan\n\nOUTPUT REQUIREMENT\n- Return only the assistant reply text for end-user.\n- No system/debug/tool metadata in final response.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -320,
+        -192
+      ],
+      "id": "5c692dee-9d12-4222-ad1e-d67eb2f16ccc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        80
+      ],
+      "id": "7c5bd455-cb07-4ce6-976e-63f19a757531",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "TOhHN4pcUftY15tG",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "aman2626",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -288,
+        32
+      ],
+      "id": "9ac1e9d8-fc58-4b5c-b370-ade6ca61ed6d",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        704,
+        80
+      ],
+      "id": "beed0153-7020-4360-afc6-07d1fc241588",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {
+          "gl": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Country', ``, 'string') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        96
+      ],
+      "id": "263680a5-2474-4ad9-a3ce-ef9d35a9377a",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "YMLl0SCGpcJlIOww",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Google Search",
+        "height": 192,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "951bd9d1-07d6-409c-89ea-16e2c94fc79f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3a8f5879-7f56-4f96-88db-c9435b060e3a",
+              "leftValue": "intent",
+              "rightValue": "hospital_search",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        -192
+      ],
+      "id": "57f5133d-6f69-411b-9095-47945a743639",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "54501c8a-6ee1-49de-a063-14c60153c4a0",
+              "leftValue": "location ",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        -240
+      ],
+      "id": "864b62b7-a2f0-4d88-a8a8-ae47a5d5e89b",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "https://overpass-api.de/api/interpreter",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "=[out:json]; node[\"amenity\"=\"hospital\"](26.9124,75.7873,26.95,75.85); out;"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        496,
+        -240
+      ],
+      "id": "eb64fab3-94f7-4b66-8980-25951ed5abd4",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "59b0470a-a399-4d30-9315-5003df07badb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "719b567219d3669213b461861843684daa6f7510c9060997f10ac468711e25af"
+  },
+  "id": "vXaAJjhIOgrzGblr",
+  "tags": []
+}
