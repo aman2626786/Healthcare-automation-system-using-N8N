@@ -1,4 +1,4 @@
-# Healthcare Chatbot – CalmNest Automation
+# Healthcare Chatbot – Swasthya Sampark 
 
 ## 📌 Overview
 This project implements an **AI-powered healthcare chatbot** named **Jaya**, designed for **Swasthya Sampark: healthcare management system**.  
@@ -14,16 +14,6 @@ It integrates with **n8n workflow automation** to handle:
 - External API calls for location-based hospital data
 - Safe and supportive guidance following strict mental health safety rules
 
----
-
-## 🎯 Mission
-Jaya’s mission is to:
-- Validate emotions and provide practical next steps
-- Guide users toward CalmNest features (breathing exercises, PHQ-9, GAD-7, emotion tracking, dashboard)
-- Ensure safety by responding appropriately to crisis situations
-- Use memory and search tools to personalize and enrich support
-
----
 
 ## ⚙️ Workflow Components
 The automation is built in **n8n** and consists of the following nodes:
@@ -72,11 +62,6 @@ The automation is built in **n8n** and consists of the following nodes:
 - Warm, concise, empathetic responses (4–8 lines)  
 - Hinglish support (Roman script) for accessibility  
 - Emotion validation + practical micro-plans  
-- Integration with CalmNest features:
-  - Breathing exercises
-  - PHQ-9 & GAD-7 assessments
-  - Emotion tracking
-  - Dashboard view
 
 ---
 
